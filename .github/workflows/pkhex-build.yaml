@@ -50,9 +50,9 @@ jobs:
           $nugetver = (Get-ChildItem "$env:UserProfile/.nuget/packages/pkhex.core" | Sort-Object -Property LastWriteTime -Descending)[0].Name
           Copy-Item "${{ github.workspace }}/PKHeX/PKHeX.Core/bin/Any CPU/Release/net9.0/PKHeX.Core.dll" "$env:UserProfile/.nuget/packages/pkhex.core/$nugetver/lib/net9.0"
 
-      - name: Build PKHeX-Plugins
+      - name: Build PKHeX.Core.AutoMod
         run: |
-          msbuild ${{ github.workspace }}/PKHeX-Plugins.sln /p:Configuration=Release /p:Platform="Any CPU"
+          msbuild ${{ github.workspace }}/PKHeX.Core.AutoMod/PKHeX.Core.AutoMod.csproj /p:Configuration=Release /p:Platform="Any CPU"
 
       - name: Prepare artifacts
         run: |
