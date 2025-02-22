@@ -13,7 +13,7 @@ jobs:
       
       - name: Checkout PKHeX Plugins
         run: |
-          git clone -q --depth=5 --branch=cherrytree https://github.com/kwsch/PKHeX.git ${{ github.workspace }}/PKHeX-Plugins
+          git clone -q --depth=5 --branch=cherrytree https://github.com/santacrab2/PKHeX-Plugins.git ${{ github.workspace }}/PKHeX-Plugins
           
 
       - name: Checkout PKHeX
