@@ -13,7 +13,7 @@ jobs:
         with:
           fetch-depth: 5
           repository: santacrab2/PKHeX-Plugins
-          ref: cherry-tree
+          ref: cherrytree
 
       - name: Checkout PKHeX
         run: |
