@@ -39,7 +39,7 @@ jobs:
 
       - name: Build PKHeX.Core
         run: |
-          msbuild ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic
+          "& ""C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"" ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform=""Any CPU"" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic"
         shell: powershell
 
       - name: Locate PKHeX.Core.dll
