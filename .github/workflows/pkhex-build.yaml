@@ -2,7 +2,6 @@ name: .NET Desktop Build
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   build:
@@ -31,6 +30,9 @@ jobs:
           nuget install nuget.commandline -OutputDirectory .nuget -ExcludeVersion
           echo "$(pwd)/.nuget/nuget.commandline/tools" >> $GITHUB_PATH
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
       - name: Restore NuGet dependencies for PKHeX-Plugins
         run: nuget restore ${{ github.workspace }}/PKHeX-Plugins.sln
 
@@ -39,24 +41,17 @@ jobs:
 
       - name: Build PKHeX.Core
         run: |
-          "& ""C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"" ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform=""Any CPU"" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic"
-        shell: powershell
-
-      - name: Locate PKHeX.Core.dll
-        shell: powershell
-        run: |
-          Get-ChildItem -Path "${{ github.workspace }}/PKHeX/PKHeX.Core/bin/" -Recurse -Filter "PKHeX.Core.dll"
+          msbuild ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic
 
       - name: Copy PKHeX.Core.dll to NuGet cache
         shell: powershell
         run: |
           $nugetver = (Get-ChildItem "$env:UserProfile/.nuget/packages/pkhex.core" | Sort-Object -Property LastWriteTime -Descending)[0].Name
-          Copy-Item "${{ github.workspace }}/PKHeX/PKHeX.Core/bin/Any CPU/Release/net8.0/PKHeX.Core.dll" "$env:UserProfile/.nuget/packages/pkhex.core/$nugetver/lib/net9.0"
+          Copy-Item "${{ github.workspace }}/PKHeX/PKHeX.Core/bin/Any CPU/Release/net9.0/PKHeX.Core.dll" "$env:UserProfile/.nuget/packages/pkhex.core/$nugetver/lib/net9.0"
 
       - name: Build PKHeX-Plugins
         run: |
-          "& ""C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"" ${{ github.workspace }}/PKHeX-Plugins.sln /p:Configuration=Release /p:Platform=""Any CPU"" /verbosity=minimal /flp:logfile=msbuild.log;verbosity=diagnostic"
-        shell: powershell
+          msbuild ${{ github.workspace }}/PKHeX-Plugins.sln /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic
 
       - name: Prepare artifacts
         run: |
