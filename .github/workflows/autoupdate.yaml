@@ -1,4 +1,4 @@
-name: .NET Desktop Build
+name: Update
 
 on:
   workflow_dispatch:
@@ -43,24 +43,20 @@ jobs:
         run: |
           msbuild ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform="Any CPU"
 
-      - name: Copy PKHeX.Core.dll to NuGet cache
-        shell: powershell
-        run: |
-          $nugetver = (Get-ChildItem "$env:UserProfile/.nuget/packages/pkhex.core" | Sort-Object -Property LastWriteTime -Descending)[0].Name
-          Copy-Item "${{ github.workspace }}/PKHeX/PKHeX.Core/bin/Any CPU/Release/net9.0/PKHeX.Core.dll" "$env:UserProfile/.nuget/packages/pkhex.core/$nugetver/lib/net9.0"
-
       - name: Build PKHeX.Core.AutoMod
         run: |
           msbuild ${{ github.workspace }}/PKHeX.Core.AutoMod/PKHeX.Core.AutoMod.csproj /p:Configuration=Release /p:Platform="Any CPU"
 
-      - name: Prepare artifacts
+      - name: Update deps directory
         run: |
-          mkdir bin
-          xcopy "${{ github.workspace }}\PKHeX.Core.AutoMod\bin\Any CPU\Release\net9.0\PKHeX.Core.AutoMod.dll" ${{ github.workspace }}\bin /Y
-          xcopy "${{ github.workspace }}\PKHeX\PKHeX.Core\bin\Any CPU\Release\net9.0\PKHeX.Core.dll" ${{ github.workspace }}\bin /Y
+          mkdir -p ${{ github.workspace }}/deps
+          cp "${{ github.workspace }}/PKHeX.Core.AutoMod/bin/Any CPU/Release/net9.0/PKHeX.Core.AutoMod.dll" "${{ github.workspace }}/deps/PKHeX.Core.AutoMod.dll"
+          cp "${{ github.workspace }}/PKHeX/PKHeX.Core/bin/Any CPU/Release/net9.0/PKHeX.Core.dll" "${{ github.workspace }}/deps/PKHeX.Core.dll"
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: PKHeX-Core-And-AutoMod-dlls
-          path: ${{ github.workspace }}/bin
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add deps/PKHeX.Core.dll deps/PKHeX.Core.AutoMod.dll
+          git commit -m "Update PKHeX.Core.dll and PKHeX.Core.AutoMod.dll"
+          git push
