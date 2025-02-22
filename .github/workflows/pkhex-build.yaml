@@ -41,7 +41,7 @@ jobs:
 
       - name: Build PKHeX.Core
         run: |
-          msbuild ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic
+          msbuild ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform="Any CPU"
 
       - name: Copy PKHeX.Core.dll to NuGet cache
         shell: powershell
@@ -51,7 +51,7 @@ jobs:
 
       - name: Build PKHeX-Plugins
         run: |
-          msbuild ${{ github.workspace }}/PKHeX-Plugins.sln /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic
+          msbuild ${{ github.workspace }}/PKHeX-Plugins.sln /p:Configuration=Release /p:Platform="Any CPU"
 
       - name: Prepare artifacts
         run: |
