@@ -57,7 +57,8 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir bin
-          xcopy ${{ github.workspace }}\AutoLegalityMod\bin\Release\net9.0-windows\AutoModPlugins.dll ${{ github.workspace }}\bin /Y
+          xcopy ${{ github.workspace }}\PKHeX.Core.AutoMod\bin\Release\net9.0-windows\PKHeX.Core.AutoMod.dll ${{ github.workspace }}\bin /Y
+          xcopy "${{ github.workspace }}\PKHeX\PKHeX.Core\bin\Any CPU\Release\net9.0\PKHeX.Core.dll" ${{ github.workspace }}\bin /Y
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
