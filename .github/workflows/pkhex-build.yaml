@@ -2,6 +2,7 @@ name: .NET Desktop Build
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
@@ -38,7 +39,8 @@ jobs:
 
       - name: Build PKHeX.Core
         run: |
-          msbuild ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic
+          "& ""C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"" ${{ github.workspace }}/PKHeX/PKHeX.Core/PKHeX.Core.csproj /p:Configuration=Release /p:Platform=""Any CPU"" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic"
+        shell: powershell
 
       - name: Copy PKHeX.Core.dll to NuGet cache
         shell: powershell
@@ -48,7 +50,8 @@ jobs:
 
       - name: Build PKHeX-Plugins
         run: |
-          msbuild ${{ github.workspace }}/PKHeX-Plugins.sln /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal /flp:logfile=msbuild.log;verbosity=diagnostic
+          "& ""C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"" ${{ github.workspace }}/PKHeX-Plugins.sln /p:Configuration=Release /p:Platform=""Any CPU"" /verbosity=minimal /flp:logfile=msbuild.log;verbosity=diagnostic"
+        shell: powershell
 
       - name: Prepare artifacts
         run: |
