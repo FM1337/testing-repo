@@ -2,6 +2,7 @@ name: .NET Desktop Build
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
