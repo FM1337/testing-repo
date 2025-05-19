@@ -59,7 +59,7 @@ jobs:
 
       - name: Prepare artifacts
         run: |
-          mkdir bin
+          if not exist bin mkdir bin
           xcopy "${{ github.workspace }}\PKHeX-Plugins\PKHeX.Core.AutoMod\bin\Any CPU\Release\net9.0\PKHeX.Core.AutoMod.dll" ${{ github.workspace }}\bin /Y
           xcopy "${{ github.workspace }}\PKHeX\PKHeX.Core\bin\Any CPU\Release\net9.0\PKHeX.Core.dll" ${{ github.workspace }}\bin /Y
 
